@@ -3,7 +3,7 @@ import { HiArrowRight } from "react-icons/hi2";
 import { motion } from "motion/react";
 
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 
 export function HeroWithCenteredImage() {
   return (

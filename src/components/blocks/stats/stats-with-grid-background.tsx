@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { IconArrowsUp, IconServer, IconTimeline } from "@tabler/icons-react";
 import React from "react";
 import { useId } from "react";

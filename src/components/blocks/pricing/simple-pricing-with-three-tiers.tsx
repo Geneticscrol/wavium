@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { IconCheck, IconPlus } from "@tabler/icons-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 
 export enum plan {
   hobby = "hobby",

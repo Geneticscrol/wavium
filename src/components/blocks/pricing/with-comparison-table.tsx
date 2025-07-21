@@ -24,7 +24,18 @@ const tiers = [
     mostPopular: false,
   },
 ];
-const sections = [
+type TierName = "Starter" | "Growth" | "Scale";
+type TierValue = boolean | string;
+type Feature = {
+  name: string;
+  tiers: Record<TierName, TierValue>;
+};
+type Section = {
+  name: string;
+  features: Feature[];
+};
+
+const sections: Section[] = [
   {
     name: "Features",
     features: [
@@ -90,7 +101,7 @@ const sections = [
   },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -145,30 +156,43 @@ export default function WithComparisonTable() {
               >
                 Buy plan
               </a>
-              <ul
-                role="list"
-                className="mt-10 space-y-4 text-sm/6 text-gray-900"
-              >
+              <ul className="mt-8 space-y-4 text-sm text-gray-600">
                 {sections.map((section) => (
                   <li key={section.name}>
-                    <ul role="list" className="space-y-4">
+                    <div className="font-semibold text-gray-900 mb-2">{section.name}</div>
+                    <ul className="space-y-2">
                       {section.features.map((feature) =>
-                        feature.tiers[tier.name] ? (
+                        feature.tiers[tier.name as TierName] ? (
                           <li key={feature.name} className="flex gap-x-3">
                             <CheckIcon
                               aria-hidden="true"
                               className="h-6 w-5 flex-none text-indigo-600"
                             />
                             <span>
-                              {feature.name}{" "}
-                              {typeof feature.tiers[tier.name] === "string" ? (
+                              {feature.name}
+                              {typeof feature.tiers[tier.name as TierName] === "string" ? (
                                 <span className="text-sm/6 text-gray-500">
-                                  ({feature.tiers[tier.name]})
+                                  ({feature.tiers[tier.name as TierName]})
                                 </span>
                               ) : null}
                             </span>
                           </li>
-                        ) : null,
+                        ) : (
+                          <li key={feature.name} className="flex gap-x-3">
+                            <MinusIcon
+                              aria-hidden="true"
+                              className="h-6 w-5 flex-none text-gray-400"
+                            />
+                            <span>
+                              {feature.name}
+                              {typeof feature.tiers[tier.name as TierName] === "string" ? (
+                                <span className="text-sm/6 text-gray-500">
+                                  ({feature.tiers[tier.name as TierName]})
+                                </span>
+                              ) : null}
+                            </span>
+                          </li>
+                        )
                       )}
                     </ul>
                   </li>
@@ -271,13 +295,13 @@ export default function WithComparisonTable() {
                         </th>
                         {tiers.map((tier) => (
                           <td key={tier.id} className="px-6 py-4 xl:px-8">
-                            {typeof feature.tiers[tier.name] === "string" ? (
+                            {typeof feature.tiers[tier.name as TierName] === "string" ? (
                               <div className="text-center text-sm/6 text-gray-500">
-                                {feature.tiers[tier.name]}
+                                {feature.tiers[tier.name as TierName]}
                               </div>
                             ) : (
                               <>
-                                {feature.tiers[tier.name] === true ? (
+                                {feature.tiers[tier.name as TierName] === true ? (
                                   <CheckIcon
                                     aria-hidden="true"
                                     className="mx-auto size-5 text-indigo-600"
@@ -290,7 +314,7 @@ export default function WithComparisonTable() {
                                 )}
 
                                 <span className="sr-only">
-                                  {feature.tiers[tier.name] === true
+                                  {feature.tiers[tier.name as TierName] === true
                                     ? "Included"
                                     : "Not included"}{" "}
                                   in {tier.name}

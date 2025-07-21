@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 
 const FAQs = [
   {

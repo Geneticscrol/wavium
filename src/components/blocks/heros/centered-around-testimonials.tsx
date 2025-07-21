@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { Outfit } from "next/font/google";
 import Image from "next/image";

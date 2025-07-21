@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 
 export function HeroSectionWithImagesGrid() {
   return (

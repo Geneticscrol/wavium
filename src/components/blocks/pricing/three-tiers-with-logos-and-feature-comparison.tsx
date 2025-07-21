@@ -2,7 +2,17 @@ import { Fragment } from "react";
 import { CheckIcon, MinusIcon, PlusIcon } from "@heroicons/react/16/solid";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 
-const tiers = [
+type TierName = "Starter" | "Growth" | "Scale";
+
+type Tier = {
+  name: TierName;
+  description: string;
+  priceMonthly: string;
+  href: string;
+  highlights: { description: string; disabled?: boolean }[];
+};
+
+const tiers: Tier[] = [
   {
     name: "Starter",
     description: "Everything you need to get started.",
@@ -46,7 +56,21 @@ const tiers = [
     ],
   },
 ];
-const sections = [
+
+type FeatureTierValue = boolean | string;
+type FeatureTiers = { [key in TierName]: FeatureTierValue };
+
+type Feature = {
+  name: string;
+  tiers: FeatureTiers;
+};
+
+type Section = {
+  name: string;
+  features: Feature[];
+};
+
+const sections: Section[] = [
   {
     name: "Features",
     features: [
@@ -253,66 +277,62 @@ export default function ThreeTiersWithLogosAndFeatureComparison() {
               ))}
             </tr>
           </thead>
-          {sections.map((section) => (
-            <tbody key={section.name} className="group">
-              <tr>
-                <th
-                  scope="colgroup"
-                  colSpan={4}
-                  className="px-0 pt-10 pb-0 group-first-of-type:pt-5"
-                >
-                  <div className="-mx-4 rounded-lg bg-gray-50 px-4 py-3 text-sm/6 font-semibold text-gray-950">
-                    {section.name}
-                  </div>
-                </th>
-              </tr>
-              {section.features.map((feature) => (
-                <tr
-                  key={feature.name}
-                  className="border-b border-gray-100 last:border-none"
-                >
+          <tbody>
+            {sections.map((section) => (
+              <Fragment key={section.name}>
+                <tr>
                   <th
-                    scope="row"
-                    className="px-0 py-4 text-sm/6 font-normal text-gray-600"
+                    colSpan={tiers.length + 1}
+                    className="bg-gray-50 px-6 py-3 text-sm/6 font-semibold text-gray-950"
                   >
-                    {feature.name}
+                    {section.name}
                   </th>
-                  {tiers.map((tier) => (
-                    <td key={tier.name} className="p-4 max-sm:text-center">
-                      {typeof feature.tiers[tier.name] === "string" ? (
-                        <>
-                          <span className="sr-only">{tier.name} includes:</span>
-                          <span className="text-sm/6 text-gray-950">
-                            {feature.tiers[tier.name]}
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          {feature.tiers[tier.name] === true ? (
-                            <CheckIcon
-                              aria-hidden="true"
-                              className="inline-block size-4 fill-green-600"
-                            />
-                          ) : (
-                            <MinusIcon
-                              aria-hidden="true"
-                              className="inline-block size-4 fill-gray-400"
-                            />
-                          )}
-
-                          <span className="sr-only">
-                            {feature.tiers[tier.name] === true
-                              ? `Included in ${tier.name}`
-                              : `Not included in ${tier.name}`}
-                          </span>
-                        </>
-                      )}
-                    </td>
-                  ))}
                 </tr>
-              ))}
-            </tbody>
-          ))}
+                {section.features.map((feature) => (
+                  <tr key={feature.name}>
+                    <th className="py-4 text-sm/6 font-normal text-gray-600">
+                      {feature.name}
+                    </th>
+                    {tiers.map((tier) => {
+                      const value = feature.tiers[tier.name];
+                      return (
+                        <td key={tier.name} className="p-4 max-sm:text-center">
+                          {typeof value === "string" ? (
+                            <>
+                              <span className="sr-only">{tier.name} includes:</span>
+                              <span className="text-sm/6 text-gray-950">
+                                {value}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              {value === true ? (
+                                <CheckIcon
+                                  aria-hidden="true"
+                                  className="inline-block size-4 fill-green-600"
+                                />
+                              ) : (
+                                <MinusIcon
+                                  aria-hidden="true"
+                                  className="inline-block size-4 fill-gray-400"
+                                />
+                              )}
+
+                              <span className="sr-only">
+                                {value === true
+                                  ? `Included in ${tier.name}`
+                                  : `Not included in ${tier.name}`}
+                              </span>
+                            </>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </Fragment>
+            ))}
+          </tbody>
         </table>
         <TabGroup className="sm:hidden">
           <TabList className="flex">

@@ -1,6 +1,13 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { AnimationProps, motion } from "motion/react";
+import { cn } from "@/app/lib/utils";
+import { animations, motion } from "motion/react";
+import type { MotionValue } from "framer-motion";
+
+type AnimationProps = {
+  initial?: object;
+  whileInView?: object;
+  transition?: object;
+};
 import React from "react";
 
 export function TextAnimationBlurFadeInDemo() {
@@ -39,22 +46,26 @@ export function TextAnimationBlurFadeInDemo() {
   );
 }
 
+import type { HTMLMotionProps } from "framer-motion";
+
+type TextProps = {
+  children: string;
+  className?: string;
+  delay?: number;
+} & Omit<HTMLMotionProps<"p">, "ref">;
+
 const Text = ({
   children,
   className,
   delay = 0,
   ...animationProps
-}: {
-  children: string;
-  className?: string;
-  delay?: number;
-} & AnimationProps) => {
+}: TextProps) => {
   return (
     <motion.p
       {...animationProps}
       className={cn("text-4xl font-medium", className)}
     >
-      {children.split(" ").map((word, index) => (
+      {children.split(" ").map((word: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | MotionValue<number> | MotionValue<string> | null | undefined, index: number) => (
         <motion.span
           key={`word-${index}-${word}`}
           initial={{
@@ -73,7 +84,10 @@ const Text = ({
           }}
           className="inline-block"
         >
-          {word}&nbsp;
+          {typeof word === "object" && word !== null && ("get" in word)
+            ? String(word.get())
+            : word}
+          &nbsp;
         </motion.span>
       ))}
     </motion.p>
